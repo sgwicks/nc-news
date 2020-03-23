@@ -36,6 +36,43 @@ describe('formatDates', () => {
   })
 });
 
-describe('makeRefObj', () => { });
+describe.only('makeRefObj', () => {
+  it('returns an object', () => {
+    const articles = [
+      { title: 'How to Code', article_id: 1 },
+      { title: 'Why Code', article_id: 2 },
+      { title: 'Coding for Philosophers', article_id: 3 }
+    ]
+
+    expect(makeRefObj(articles)).to.be.an('Object')
+  })
+  it('turns article titles into keys, and article_ids into values', () => {
+    const articles = [
+      { title: 'How to Code', article_id: 1 },
+      { title: 'Why Code', article_id: 2 },
+      { title: 'Coding for Philosophers', article_id: 3 }
+    ]
+
+    expect(makeRefObj(articles)).to.include.keys(
+      'How to Code',
+      'Why Code',
+      'Coding for Philosophers'
+    )
+    expect(makeRefObj(articles)['How to Code']).to.equal(1)
+    expect(makeRefObj(articles)['Why Code']).to.equal(2)
+    expect(makeRefObj(articles)['Coding for Philosophers']).to.equal(3)
+  })
+  it('Doesn\'t mutate the original objects', () => {
+    const articles = [
+      { title: 'How to Code', article_id: 1 },
+      { title: 'Why Code', article_id: 2 },
+      { title: 'Coding for Philosophers', article_id: 3 }
+    ]
+
+    makeRefObj(articles)
+
+    expect(articles[0]).to.eql({ title: 'How to Code', article_id: 1 })
+  })
+});
 
 describe('formatComments', () => { });

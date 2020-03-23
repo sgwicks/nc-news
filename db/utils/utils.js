@@ -11,10 +11,10 @@ exports.formatDates = list => {
     return formattedDates
 };
 
-// takes a list of objects with property created_at
-// returns a list of similar objects, with created_at formatted
-
-
-exports.makeRefObj = list => { };
+exports.makeRefObj = list => {
+    const reference = {}
+    list.forEach(item => reference[item.title] = item.article_id)
+    return reference
+};
 
 exports.formatComments = (comments, articleRef) => { };
