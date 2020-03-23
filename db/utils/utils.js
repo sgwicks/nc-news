@@ -26,14 +26,10 @@ exports.formatComments = (comments, articleRef) => {
             body,
             article_id,
             votes,
-            created_at,
+            created_at: new Date(created_at),
             author: comment.created_by
         }
         formattedComments.push(newComment)
     })
     return formattedComments
 };
-
-
-// belongs_to: title >>> article_id
-// created_at >>> JS date
