@@ -1,5 +1,11 @@
-exports.formatDates = list => {};
+exports.formatDates = list => {
+    return [...list]
+};
 
-exports.makeRefObj = list => {};
+// takes a list of objects with property created_at
+// returns a list of similar objects, with created_at formatted
 
-exports.formatComments = (comments, articleRef) => {};
+
+exports.makeRefObj = list => { };
+
+exports.formatComments = (comments, articleRef) => { };
