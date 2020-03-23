@@ -6,7 +6,7 @@ const {
 } = require('../db/utils/utils');
 
 describe('formatDates', () => {
-  it('Given an empty array, returns a NEW array of the same length', () => {
+  it('Given an array, returns a NEW array of the same length', () => {
     const arr = [{ object: 1, created_at: 1511354163389 },
     { object: 2, created_at: 1511354163466 },
     { object: 3, created_at: 1511354163570 }]
@@ -36,7 +36,7 @@ describe('formatDates', () => {
   })
 });
 
-describe.only('makeRefObj', () => {
+describe('makeRefObj', () => {
   it('returns an object', () => {
     const articles = [
       { title: 'How to Code', article_id: 1 },
@@ -75,4 +75,105 @@ describe.only('makeRefObj', () => {
   })
 });
 
-describe('formatComments', () => { });
+describe.only('formatComments', () => {
+  it('Returns a new array of the same length', () => {
+    const comments = [{
+      body:
+        "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      belongs_to: "They're not exactly dogs, are they?",
+      created_by: 'butter_bridge',
+      votes: 16,
+      created_at: 1511354163389,
+    },
+    {
+      body:
+        'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+      belongs_to: 'Living in the shadow of a great man',
+      created_by: 'butter_bridge',
+      votes: 14,
+      created_at: 1479818163389,
+    },
+    {
+      body:
+        'Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.',
+      belongs_to: 'Living in the shadow of a great man',
+      created_by: 'icellusedkars',
+      votes: 100,
+      created_at: 1448282163389,
+    }]
+
+    expect(formatComments(comments)).to.be.an('Array')
+    expect(formatComments(comments)).to.have.lengthOf(3)
+    expect(formatComments(comments)).not.to.equal(comments)
+  })
+  it('Renames created_by key to author', () => {
+    const comments = [{
+      body:
+        "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      belongs_to: "They're not exactly dogs, are they?",
+      created_by: 'butter_bridge',
+      votes: 16,
+      created_at: 1511354163389,
+    },
+    {
+      body:
+        'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+      belongs_to: 'Living in the shadow of a great man',
+      created_by: 'butter_bridge',
+      votes: 14,
+      created_at: 1479818163389,
+    },
+    {
+      body:
+        'Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.',
+      belongs_to: 'Living in the shadow of a great man',
+      created_by: 'icellusedkars',
+      votes: 100,
+      created_at: 1448282163389,
+    }]
+
+    expect(formatComments(comments)[0].author).to.equal('butter_bridge')
+    expect(formatComments(comments)[0]).not.to.include.keys('created_by')
+  })
+  it('Does not mutate the original objects', () => {
+    const comments = [{
+      body:
+        "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      belongs_to: "They're not exactly dogs, are they?",
+      created_by: 'butter_bridge',
+      votes: 16,
+      created_at: 1511354163389,
+    },
+    {
+      body:
+        'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+      belongs_to: 'Living in the shadow of a great man',
+      created_by: 'butter_bridge',
+      votes: 14,
+      created_at: 1479818163389,
+    },
+    {
+      body:
+        'Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.',
+      belongs_to: 'Living in the shadow of a great man',
+      created_by: 'icellusedkars',
+      votes: 100,
+      created_at: 1448282163389,
+    }]
+
+    formatComments(comments)
+
+    expect(comments[0]).to.eql({
+      body:
+        "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      belongs_to: "They're not exactly dogs, are they?",
+      created_by: 'butter_bridge',
+      votes: 16,
+      created_at: 1511354163389,
+    })
+
+  })
+
+
+
+});
