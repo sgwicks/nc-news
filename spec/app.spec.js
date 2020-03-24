@@ -71,4 +71,28 @@ describe('/api', () => {
             })
         })
     })
+    describe.only('/articles', () => {
+        describe('/:article_id', () => {
+            describe('GET:', () => {
+                describe('200:', () => {
+                    it('returns an article object', () => {
+                        return request(app)
+                            .get('/api/articles/1')
+                            .expect(200)
+                            .then(({ body: { article } }) => {
+                                expect(article).to.include.keys(
+                                    'author',
+                                    'title',
+                                    'article_id',
+                                    'body',
+                                    'topic',
+                                    'created_at',
+                                    'votes'
+                                )
+                            })
+                    })
+                })
+            })
+        })
+    })
 })
