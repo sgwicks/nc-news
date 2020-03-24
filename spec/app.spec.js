@@ -113,11 +113,21 @@ describe('/api', () => {
                             expect(msg).to.equal('article doesn\'t exist')
                         })
                 })
-                xit('400: invalid article id', () => {
-
+                it('400: invalid article id', () => {
+                    return request(app)
+                        .get('/api/articles/one')
+                        .expect(400)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('Bad request: invalid id')
+                        })
                 })
-                xit('405: invalid method', () => {
-
+                it('405: invalid method', () => {
+                    return request(app)
+                        .post('/api/articles/1')
+                        .expect(405)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('POST method not allowed')
+                        })
                 })
             })
         })
