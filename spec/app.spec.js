@@ -102,12 +102,12 @@ describe('/api', () => {
                 })
             })
             describe('PATCH:', () => {
-                describe('201:', () => {
+                describe('200:', () => {
                     it('accepts a body of {inc_votes: NUM}', () => {
                         return request(app)
                             .patch('/api/articles/1')
                             .send({ inc_votes: 1 })
-                            .expect(201)
+                            .expect(200)
                             .then(({ body: { article } }) => {
                                 expect(article.votes).to.equal(101)
                             })
@@ -116,7 +116,7 @@ describe('/api', () => {
                         return request(app)
                             .patch('/api/articles/1')
                             .send({ inc_votes: -1 })
-                            .expect(201)
+                            .expect(200)
                             .then(({ body: { article } }) => {
                                 expect(article.votes).to.equal(99)
                             })
@@ -125,7 +125,7 @@ describe('/api', () => {
                         return request(app)
                             .patch('/api/articles/1')
                             .send({ inc_votes: 1 })
-                            .expect(201)
+                            .expect(200)
                             .then(({ body: { article } }) => {
                                 expect(article.votes).to.equal(101)
                                 expect(article).to.have.keys(
@@ -217,6 +217,51 @@ describe('/api', () => {
                         .then(({ body: { msg } }) => {
                             expect(msg).to.equal('POST method not allowed')
                         })
+                })
+            })
+            describe.only('/comments', () => {
+                describe('POST:', () => {
+                    describe('201:', () => {
+                        it('accepts a new comment with a username and body', () => {
+                            return request(app)
+                                .post('/api/articles/1/comments')
+                                .send({
+                                    username: 'icellusedkars',
+                                    body: 'Just re-reading this article. What a beaut'
+                                })
+                                .expect(201)
+                                .then(({ body: { comment } }) => {
+                                    expect(comment).to.have.keys(
+                                        'body',
+                                        'author',
+                                        'article_id',
+                                        'votes',
+                                        'created_at',
+                                        'comment_id'
+                                    )
+                                    expect(comment.author).to.equal('icellusedkars')
+                                    expect(comment.body).to.equal('Just re-reading this article. What a beaut')
+                                    expect(comment.article_id).to.equal(1)
+                                })
+                        })
+                        it('adds the comment to the comments table', () => {
+                            // Can come back to this test when GET comments is implemented
+                            return request(app)
+                                .post('/api/articles/1/comments')
+                                .send({
+                                    username: 'icellusedkars',
+                                    body: 'Just re-reading this article. What a beaut'
+                                })
+                                .expect(201)
+                                .then(() => {
+                                    return request(app)
+                                        .get('/api/articles/1')
+                                        .then(({ body: { article } }) => {
+                                            expect(article.comment_count).to.equal(14)
+                                        })
+                                })
+                        })
+                    })
                 })
             })
         })
