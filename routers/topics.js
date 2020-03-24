@@ -1,7 +1,8 @@
 const topicsRouter = require('express').Router()
-const { getAllTopics } = require('../controllers/topics')
+const { getAllTopics, unhandledMethod } = require('../controllers/topics')
 
 topicsRouter.route('/')
     .get(getAllTopics)
+    .all(unhandledMethod)
 
 module.exports = topicsRouter
