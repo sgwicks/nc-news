@@ -20,15 +20,15 @@ describe('/api', () => {
                         })
                 })
             })
-            describe('400:', () => {
-                it('405: unhandled methods', () => {
-                    return request(app)
-                        .post('/api/topics')
-                        .expect(405)
-                        .then(({ body: { msg } }) => {
-                            expect(msg).to.equal('POST method not allowed')
-                        })
-                })
+        })
+        describe('ERROR:', () => {
+            it('405: unhandled methods', () => {
+                return request(app)
+                    .post('/api/topics')
+                    .expect(405)
+                    .then(({ body: { msg } }) => {
+                        expect(msg).to.equal('POST method not allowed')
+                    })
             })
         })
     })
@@ -50,23 +50,23 @@ describe('/api', () => {
                             })
                     })
                 })
-                describe('400:', () => {
-                    it('404: user doesn\'t exist', () => {
-                        return request(app)
-                            .get('/api/users/samtheman')
-                            .expect(404)
-                            .then(({ body: { msg } }) => {
-                                expect(msg).to.equal('username samtheman not found')
-                            })
-                    })
-                    it('405: undhandled methods', () => {
-                        return request(app)
-                            .patch('/api/users/icellusedkars')
-                            .expect(405)
-                            .then(({ body: { msg } }) => {
-                                expect(msg).to.equal('PATCH method not allowed')
-                            })
-                    })
+            })
+            describe('ERROR:', () => {
+                it('404: user doesn\'t exist', () => {
+                    return request(app)
+                        .get('/api/users/samtheman')
+                        .expect(404)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('username samtheman not found')
+                        })
+                })
+                it('405: undhandled methods', () => {
+                    return request(app)
+                        .patch('/api/users/icellusedkars')
+                        .expect(405)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('PATCH method not allowed')
+                        })
                 })
             })
         })
@@ -99,6 +99,25 @@ describe('/api', () => {
                                 expect(article.comment_count).to.equal(13)
                             })
                     })
+                })
+            })
+            describe('PATCH:', () => {
+
+            })
+            describe.only('ERROR:', () => {
+                it('404: article doesn\'t exist', () => {
+                    return request(app)
+                        .get('/api/articles/234')
+                        .expect(404)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('article doesn\'t exist')
+                        })
+                })
+                xit('400: invalid article id', () => {
+
+                })
+                xit('405: invalid method', () => {
+
                 })
             })
         })
