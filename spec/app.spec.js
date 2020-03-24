@@ -3,9 +3,10 @@ const request = require('supertest')
 const app = require('../app')
 const connection = require('../db/connection')
 
+beforeEach(() => connection.seed.run())
+after(() => connection.destroy())
+
 describe('/api', () => {
-    beforeEach(() => connection.seed.run())
-    after(() => connection.destroy())
     describe('/topics', () => {
         describe('GET', () => {
             describe('200:', () => {
@@ -27,6 +28,27 @@ describe('/api', () => {
                         .then(({ body: { msg } }) => {
                             expect(msg).to.equal('Method not allowed')
                         })
+                })
+            })
+        })
+    })
+    describe.only('/users', () => {
+        describe('/:username', () => {
+            describe('GET', () => {
+                describe('200:', () => {
+                    it('Returns a user object from a username', () => {
+                        return request(app)
+                            .get('/api/users/icellusedkars')
+                            .expect(200)
+                            .then(({ body: { user } }) => {
+                                expect(user.username).to.equal('icellusedkars')
+                                expect(user).to.have.keys(
+                                    'username',
+                                    'avatar_url',
+                                    'name'
+                                )
+                            })
+                    })
                 })
             })
         })
