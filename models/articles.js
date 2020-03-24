@@ -13,3 +13,10 @@ exports.selectArticleById = (article_id) => {
         }
     })
 }
+
+exports.updateArticleVoteCount = (article_id, inc_votes) => {
+    return connection('articles')
+        .where('article_id', article_id)
+        .increment('votes', inc_votes)
+        .returning('*')
+}

@@ -101,10 +101,61 @@ describe('/api', () => {
                     })
                 })
             })
-            describe('PATCH:', () => {
-
+            describe.only('PATCH:', () => {
+                describe('201:', () => {
+                    it('accepts a body of {inc_votes: NUM}', () => {
+                        return request(app)
+                            .patch('/api/articles/1')
+                            .send({ inc_votes: 1 })
+                            .expect(201)
+                            .then(({ body: { article } }) => {
+                                expect(article.votes).to.equal(101)
+                            })
+                    })
+                    it('accepts negative values', () => {
+                        return request(app)
+                            .patch('/api/articles/1')
+                            .send({ inc_votes: -1 })
+                            .expect(201)
+                            .then(({ body: { article } }) => {
+                                expect(article.votes).to.equal(99)
+                            })
+                    })
+                    it('returns the updated article', () => {
+                        return request(app)
+                            .patch('/api/articles/1')
+                            .send({ inc_votes: 1 })
+                            .expect(201)
+                            .then(({ body: { article } }) => {
+                                expect(article.votes).to.equal(101)
+                                expect(article).to.have.keys(
+                                    'author',
+                                    'title',
+                                    'article_id',
+                                    'body',
+                                    'topic',
+                                    'created_at',
+                                    'votes'
+                                    // comment_count?
+                                )
+                            })
+                    })
+                    it('updates the article in the database', () => {
+                        return request(app)
+                            .patch('/api/articles/1')
+                            .send({ inc_votes: 1 })
+                            .then(() => {
+                                return request(app)
+                                    .get('/api/articles/1')
+                                    .expect(200)
+                                    .then(({ body: { article } }) => {
+                                        expect(article.votes).to.equal(101)
+                                    })
+                            })
+                    })
+                })
             })
-            describe.only('ERROR:', () => {
+            describe('ERROR:', () => {
                 it('404: article doesn\'t exist', () => {
                     return request(app)
                         .get('/api/articles/234')
