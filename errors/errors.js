@@ -8,7 +8,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
 }
 
 exports.handle400Errors = (err, req, res, next) => {
-    if (err.code === '22P02') res.status(400).send({ msg: 'Bad request: invalid id' })
+    if (err.code === '22P02') res.status(400).send({ msg: 'Bad request: invalid data type' })
     else next(err)
 }
 

@@ -71,7 +71,7 @@ describe('/api', () => {
             })
         })
     })
-    describe.only('/articles', () => {
+    describe('/articles', () => {
         describe('/:article_id', () => {
             describe('GET:', () => {
                 describe('200:', () => {
@@ -101,7 +101,7 @@ describe('/api', () => {
                     })
                 })
             })
-            describe.only('PATCH:', () => {
+            describe('PATCH:', () => {
                 describe('201:', () => {
                     it('accepts a body of {inc_votes: NUM}', () => {
                         return request(app)
@@ -154,6 +154,44 @@ describe('/api', () => {
                             })
                     })
                 })
+                describe('400:', () => {
+                    it('wrong body key', () => {
+                        return request(app)
+                            .patch('/api/articles/1')
+                            .send({ inc_vote: 1 })
+                            .expect(400)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('Bad request: must use {inc_votes: NUM}')
+                            })
+                    })
+                    it('invalid data type', () => {
+                        return request(app)
+                            .patch('/api/articles/1')
+                            .send({ inc_votes: 'one' })
+                            .expect(400)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('Bad request: invalid data type')
+                            })
+                    })
+                    it('empty body', () => {
+                        return request(app)
+                            .patch('/api/articles/1')
+                            .send({})
+                            .expect(400)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('Bad request: must use {inc_votes: NUM}')
+                            })
+                    })
+                    it('extra key on body', () => {
+                        return request(app)
+                            .patch('/api/articles/1')
+                            .send({ inc_votes: 1, title: 'Cheap handbags 4 sale' })
+                            .expect(400)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('Bad request: only inc_votes is accepted')
+                            })
+                    })
+                })
             })
             describe('ERROR:', () => {
                 it('404: article doesn\'t exist', () => {
@@ -169,7 +207,7 @@ describe('/api', () => {
                         .get('/api/articles/one')
                         .expect(400)
                         .then(({ body: { msg } }) => {
-                            expect(msg).to.equal('Bad request: invalid id')
+                            expect(msg).to.equal('Bad request: invalid data type')
                         })
                 })
                 it('405: invalid method', () => {
