@@ -1,3 +1,5 @@
+const connection = require('../db/connection')
+
 exports.selectAllTopics = () => {
-    console.log('Inside the model')
+    return connection('topics').select()
 }

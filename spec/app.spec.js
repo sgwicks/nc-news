@@ -13,7 +13,7 @@ describe('/api', () => {
                     return request(app)
                         .get('/api/topics')
                         .expect(200)
-                        .then(topics => {
+                        .then(({ body: { topics } }) => {
                             expect(topics).to.be.an('Array')
                         })
                 })
