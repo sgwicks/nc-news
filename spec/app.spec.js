@@ -20,19 +20,19 @@ describe('/api', () => {
                         })
                 })
             })
-            describe('405:', () => {
-                it('Returns a 405 error on unhandled methods', () => {
+            describe('400:', () => {
+                it('405: unhandled methods', () => {
                     return request(app)
                         .post('/api/topics')
                         .expect(405)
                         .then(({ body: { msg } }) => {
-                            expect(msg).to.equal('Method not allowed')
+                            expect(msg).to.equal('POST method not allowed')
                         })
                 })
             })
         })
     })
-    describe.only('/users', () => {
+    describe('/users', () => {
         describe('/:username', () => {
             describe('GET', () => {
                 describe('200:', () => {
@@ -47,6 +47,24 @@ describe('/api', () => {
                                     'avatar_url',
                                     'name'
                                 )
+                            })
+                    })
+                })
+                describe('400:', () => {
+                    it('404: user doesn\'t exist', () => {
+                        return request(app)
+                            .get('/api/users/samtheman')
+                            .expect(404)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('username samtheman not found')
+                            })
+                    })
+                    it('405: undhandled methods', () => {
+                        return request(app)
+                            .patch('/api/users/icellusedkars')
+                            .expect(405)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('PATCH method not allowed')
                             })
                     })
                 })

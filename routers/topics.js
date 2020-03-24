@@ -1,5 +1,6 @@
 const topicsRouter = require('express').Router()
-const { getAllTopics, unhandledMethod } = require('../controllers/topics')
+const { getAllTopics } = require('../controllers/topics')
+const { unhandledMethod } = require('../errors/errors')
 
 topicsRouter.route('/')
     .get(getAllTopics)
