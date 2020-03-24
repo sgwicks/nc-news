@@ -91,6 +91,14 @@ describe('/api', () => {
                                 )
                             })
                     })
+                    it('returns an object with comment_count', () => {
+                        return request(app)
+                            .get('/api/articles/1')
+                            .expect(200)
+                            .then(({ body: { article } }) => {
+                                expect(article.comment_count).to.equal(13)
+                            })
+                    })
                 })
             })
         })
