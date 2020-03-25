@@ -219,7 +219,7 @@ describe('/api', () => {
                         })
                 })
             })
-            describe.only('/comments', () => {
+            describe('/comments', () => {
                 describe('POST:', () => {
                     describe('201:', () => {
                         it('accepts a new comment with a username and body', () => {
@@ -261,6 +261,81 @@ describe('/api', () => {
                                         })
                                 })
                         })
+                    })
+                    describe('400:', () => {
+                        it('missing body', () => {
+                            return request(app)
+                                .post('/api/articles/1/comments')
+                                .send({
+                                    username: 'icellusedkars'
+                                })
+                                .expect(400)
+                                .then(({ body: { msg } }) => {
+                                    expect(msg).to.equal('Bad request: missing vital data')
+                                })
+                        })
+                        it('missing username', () => {
+                            return request(app)
+                                .post('/api/articles/1/comments')
+                                .send({
+                                    body: 'Just re-reading this article. What a beaut'
+                                })
+                                .expect(400)
+                                .then(({ body: { msg } }) => {
+                                    expect(msg).to.equal('Bad request: missing username')
+                                })
+                        })
+                        it('empty request', () => {
+                            return request(app)
+                                .post('/api/articles/1/comments')
+                                .send({})
+                                .expect(400)
+                                .then(({ body: { msg } }) => {
+                                    expect(msg).to.equal('Bad request: missing username')
+                                })
+                        })
+                        it('excess body data', () => {
+                            return request(app)
+                                .post('/api/articles/1/comments')
+                                .send({
+                                    username: 'icellusedkars',
+                                    body: 'Just re-reading this article. What a beaut',
+                                    votes: 500
+                                })
+                                .expect(400)
+                                .then(({ body: { msg } }) => {
+                                    expect(msg).to.equal('Bad request: request can only contain {username, body}')
+                                })
+                        })
+                        it('comment too long', () => {
+                            return request(app)
+                                .post('/api/articles/1/comments')
+                                .send({
+                                    username: 'icellusedkars',
+                                    body: 'Just re-reading this article. What a beautiful construction. It has inspired me to write an article of my own, which I shall place here in the comments. Firstly, let me talk about the circumstances that lead me to post such an article, which shall itself hopefully be described by future readers as "a beaut"'
+                                })
+                                .expect(400)
+                                .then(({ body: { msg } }) => {
+                                    expect(msg).to.equal('Bad request: body too long')
+                                })
+                        })
+                        it('422: invalid username', () => {
+                            return request(app)
+                                .post('/api/articles/1/comments')
+                                .send({
+                                    username: 'isellusedcars',
+                                    body: 'Just re-reading this article. What a beaut'
+                                })
+                                .expect(422)
+                                .then(({ body: { msg } }) => {
+                                    expect(msg).to.equal('Unprocessable entity: data provided does not match the database')
+                                })
+                        })
+                    })
+                })
+                describe('ERROR:', () => {
+                    xit('405: unhandled methods', () => {
+
                     })
                 })
             })
