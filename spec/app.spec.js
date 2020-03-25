@@ -377,6 +377,15 @@ describe('/api', () => {
                                     expect(comments[12].author).to.equal('icellusedkars')
                                 })
                         })
+                        it('accepts order query to set sort_by ascending/descending', () => {
+                            return request(app)
+                                .get('/api/articles/1/comments?sort_by=author&order=desc')
+                                .expect(200)
+                                .then(({ body: { comments } }) => {
+                                    expect(comments[0].author).to.equal('icellusedkars')
+                                    expect(comments[12].author).to.equal('butter_bridge')
+                                })
+                        })
                     })
                 })
                 describe('ERROR:', () => {

@@ -9,7 +9,7 @@ exports.addNewComment = (article_id, author, body) => {
     }).returning('*')
 }
 
-exports.selectCommentsByArticle = (article_id, { sort_by }) => {
+exports.selectCommentsByArticle = (article_id, { sort_by, order = 'asc' }) => {
     return connection('comments').select([
         'comment_id',
         'author',
@@ -19,7 +19,7 @@ exports.selectCommentsByArticle = (article_id, { sort_by }) => {
     ])
         .where({ article_id })
         .modify((query) => {
-            if (sort_by) query.orderBy(sort_by)
-            else query.orderBy('created_at')
+            if (sort_by) query.orderBy(sort_by, order)
+            else query.orderBy('created_at', order)
         })
 }
