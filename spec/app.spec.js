@@ -360,6 +360,14 @@ describe('/api', () => {
                                     })
                                 })
                         })
+                        it('defaults order to created_at (ascending)', () => {
+                            return request(app)
+                                .get('/api/articles/1/comments')
+                                .expect(200)
+                                .then(({ body: { comments } }) => {
+                                    expect(comments[0].comment_id).to.equal(18)
+                                })
+                        })
                     })
                 })
                 describe('ERROR:', () => {

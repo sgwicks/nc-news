@@ -18,4 +18,5 @@ exports.selectCommentsByArticle = (article_id) => {
         'body'
     ])
         .where({ article_id })
+        .orderBy('created_at')
 }
