@@ -333,7 +333,7 @@ describe('/api', () => {
                         })
                     })
                 })
-                describe.only('GET:', () => {
+                describe('GET:', () => {
                     describe('200:', () => {
                         it('Returns an array of comments', () => {
                             return request(app)
@@ -360,12 +360,12 @@ describe('/api', () => {
                                     })
                                 })
                         })
-                        it('defaults order to created_at (ascending)', () => {
+                        it('defaults order to created_at (descending)', () => {
                             return request(app)
                                 .get('/api/articles/1/comments')
                                 .expect(200)
                                 .then(({ body: { comments } }) => {
-                                    expect(comments[0].comment_id).to.equal(18)
+                                    expect(comments[12].comment_id).to.equal(18)
                                 })
                         })
                         it('accepts query to sort_by any column', () => {
@@ -373,30 +373,40 @@ describe('/api', () => {
                                 .get('/api/articles/1/comments?sort_by=author')
                                 .expect(200)
                                 .then(({ body: { comments } }) => {
-                                    expect(comments[0].author).to.equal('butter_bridge')
-                                    expect(comments[12].author).to.equal('icellusedkars')
+                                    expect(comments[12].author).to.equal('butter_bridge')
+                                    expect(comments[0].author).to.equal('icellusedkars')
                                 })
                         })
                         it('accepts order query to set sort_by ascending/descending', () => {
                             return request(app)
-                                .get('/api/articles/1/comments?sort_by=author&order=desc')
+                                .get('/api/articles/1/comments?sort_by=author&order=asc')
                                 .expect(200)
                                 .then(({ body: { comments } }) => {
-                                    expect(comments[0].author).to.equal('icellusedkars')
-                                    expect(comments[12].author).to.equal('butter_bridge')
+                                    expect(comments[12].author).to.equal('icellusedkars')
+                                    expect(comments[0].author).to.equal('butter_bridge')
+                                })
+                        })
+                    })
+                    describe('400:', () => {
+                        it('invalid query column', () => {
+                            return request(app)
+                                .get('/api/articles/1/comments?sort_by=invalid_query')
+                                .expect(400)
+                                .then(({ body: { msg } }) => {
+                                    expect(msg).to.equal('Bad request: one or more queried columns does not exist')
                                 })
                         })
                     })
                 })
-                describe('ERROR:', () => {
-                    it('405: unhandled methods', () => {
-                        return request(app)
-                            .delete('/api/articles/1/comments')
-                            .expect(405)
-                            .then(({ body: { msg } }) => {
-                                expect(msg).to.equal('DELETE method not allowed')
-                            })
-                    })
+            })
+            describe('ERROR:', () => {
+                it('405: unhandled methods', () => {
+                    return request(app)
+                        .delete('/api/articles/1/comments')
+                        .expect(405)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('DELETE method not allowed')
+                        })
                 })
             })
         })

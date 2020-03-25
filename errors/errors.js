@@ -13,6 +13,7 @@ exports.handle400Errors = (err, req, res, next) => {
         case '23502': res.status(400).send({ msg: 'Bad request: missing vital data' }); break;
         case '22001': res.status(400).send({ msg: 'Bad request: body too long' }); break;
         case '23503': res.status(422).send({ msg: 'Unprocessable entity: data provided does not match the database' }); break;
+        case '42703': res.status(400).send({ msg: 'Bad request: one or more queried columns does not exist' }); break;
         default: next(err)
     }
 }
