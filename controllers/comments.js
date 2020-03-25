@@ -20,9 +20,12 @@ exports.getCommentsByArticle = (req, res, next) => {
 }
 
 exports.patchCommentVotes = (req, res, next) => {
-    const { comment_id } = req.params
-    const { inc_votes } = req.body
-    updateCommentVotes(comment_id, inc_votes)
-        .then(([comment]) => res.status(200).send({ comment }))
-        .catch(next)
+    if (Object.keys(req.body).length > 1) res.status(400).send({ msg: 'Bad request: must only use {inc_votes:NUM}' })
+    else {
+        const { comment_id } = req.params
+        const { inc_votes } = req.body
+        updateCommentVotes(comment_id, inc_votes)
+            .then(([comment]) => res.status(200).send({ comment }))
+            .catch(next)
+    }
 }

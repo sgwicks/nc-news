@@ -25,8 +25,13 @@ exports.selectCommentsByArticle = (article_id, { sort_by, order = 'desc' }) => {
 }
 
 exports.updateCommentVotes = (comment_id, votes) => {
+    if (!votes) return Promise.reject({ status: 400, msg: 'Bad request: must use {inc_votes:NUM}' })
     return connection('comments')
         .where({ comment_id })
         .increment({ votes })
         .returning('*')
+        .then(comment => {
+            if (!comment.length) return Promise.reject({ status: 404, msg: 'Comment doesn\'t exist' })
+            else return comment
+        })
 }

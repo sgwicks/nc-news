@@ -563,6 +563,72 @@ describe('/api', () => {
 
                     })
                 })
+                describe('400:', () => {
+                    it('invalid key on request', () => {
+                        return request(app)
+                            .patch('/api/comments/1')
+                            .send({ invalid_key: 1 })
+                            .expect(400)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('Bad request: must use {inc_votes:NUM}')
+                            })
+                    })
+                    it('empty patch request', () => {
+                        return request(app)
+                            .patch('/api/comments/1')
+                            .send({})
+                            .expect(400)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('Bad request: must use {inc_votes:NUM}')
+                            })
+                    })
+                    it('excess keys on request', () => {
+                        return request(app)
+                            .patch('/api/comments/1')
+                            .send({ inc_votes: 1, author: 'me' })
+                            .expect(400)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('Bad request: must only use {inc_votes:NUM}')
+                            })
+                    })
+                    it('invalid data type', () => {
+                        return request(app)
+                            .patch('/api/comments/1')
+                            .send({ inc_votes: 'one' })
+                            .expect(400)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('Bad request: invalid data type')
+                            })
+                    })
+                })
+            })
+            describe('ERROR:', () => {
+                it('400: invalid comment_id', () => {
+                    return request(app)
+                        .patch('/api/comments/invalid_id')
+                        .send({ inc_votes: 1 })
+                        .expect(400)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('Bad request: invalid data type')
+                        })
+                })
+                it('404: comment doesn\'t exist', () => {
+                    return request(app)
+                        .patch('/api/comments/10000000')
+                        .send({ inc_votes: 1 })
+                        .expect(404)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('Comment doesn\'t exist')
+                        })
+                })
+                it('405: unhandled methods', () => {
+                    return request(app)
+                        .put('/api/comments/1')
+                        .expect(405)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('PUT method not allowed')
+                        })
+                })
             })
         })
     })
