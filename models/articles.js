@@ -22,7 +22,7 @@ exports.updateArticleVoteCount = (article_id, inc_votes) => {
         .returning('*')
 }
 
-exports.selectAllArticles = ({ sort_by, order = 'desc', author }) => {
+exports.selectAllArticles = ({ sort_by, order = 'desc', author, topic }) => {
     return connection('articles')
         .select([
             'articles.article_id',
@@ -41,5 +41,8 @@ exports.selectAllArticles = ({ sort_by, order = 'desc', author }) => {
         })
         .modify(query => {
             if (author) query.where('articles.author', author)
+        })
+        .modify(query => {
+            if (topic) query.where('articles.topic', topic)
         })
 }

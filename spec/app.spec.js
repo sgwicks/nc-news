@@ -127,7 +127,7 @@ describe('/api', () => {
                             expect(articles[0].title).to.equal('A')
                         })
                 })
-                it('can take an filter by author query', () => {
+                it('can take a filter by author query', () => {
                     return request(app)
                         .get('/api/articles?author=icellusedkars')
                         .expect(200)
@@ -136,6 +136,15 @@ describe('/api', () => {
                             articles.forEach(article => {
                                 expect(article.author).to.equal('icellusedkars')
                             })
+                        })
+                })
+                it('can take a filter by topic query', () => {
+                    return request(app)
+                        .get('/api/articles?topic=cats')
+                        .expect(200)
+                        .then(({ body: { articles } }) => {
+                            expect(articles).to.have.lengthOf(1)
+                            expect(articles[0].topic).to.equal('cats')
                         })
                 })
             })
