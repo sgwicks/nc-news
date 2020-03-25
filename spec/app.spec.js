@@ -127,6 +127,17 @@ describe('/api', () => {
                             expect(articles[0].title).to.equal('A')
                         })
                 })
+                it('can take an filter by author query', () => {
+                    return request(app)
+                        .get('/api/articles?author=icellusedkars')
+                        .expect(200)
+                        .then(({ body: { articles } }) => {
+                            expect(articles).to.have.lengthOf(6)
+                            articles.forEach(article => {
+                                expect(article.author).to.equal('icellusedkars')
+                            })
+                        })
+                })
             })
         })
         describe('/:article_id', () => {
