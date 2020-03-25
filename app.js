@@ -9,6 +9,8 @@ app.use(express.json())
 
 app.use('/api', apiRouter)
 
+// INVALID ROUTES
+
 app.all('/*', handle404Errors)
 
 // ERROR HANDLING

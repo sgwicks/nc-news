@@ -669,7 +669,7 @@ describe('/api', () => {
             })
         })
     })
-    describe.only('404:', () => {
+    describe('404:', () => {
         it('returns a custom 404 message', () => {
             return request(app)
                 .get('/invalid_route/invalid')

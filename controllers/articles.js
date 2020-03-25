@@ -3,9 +3,8 @@ const { selectArticleById, updateArticleVoteCount, selectAllArticles } = require
 exports.getArticleById = (req, res, next) => {
     const { article_id } = req.params
     selectArticleById(article_id)
-        .then((article) => {
-            res.status(200).send({ article })
-        }).catch(next)
+        .then((article) => res.status(200).send({ article }))
+        .catch(next)
 }
 
 exports.patchArticleVoteCount = (req, res, next) => {
