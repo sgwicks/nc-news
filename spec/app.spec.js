@@ -72,6 +72,37 @@ describe('/api', () => {
         })
     })
     describe('/articles', () => {
+        describe.only('GET:', () => {
+            describe('200:', () => {
+                it('responds with an array of all article objects', () => {
+                    return request(app)
+                        .get('/api/articles')
+                        .expect(200)
+                        .then(({ body: { articles } }) => {
+                            expect(articles).to.be.an('Array')
+                            expect(articles).to.have.lengthOf(12)
+                        })
+                })
+                it('articles have no body, and include comment count', () => {
+                    return request(app)
+                        .get('/api/articles')
+                        .expect(200)
+                        .then(({ body: { articles } }) => {
+                            articles.forEach(article => {
+                                expect(article).to.have.keys(
+                                    'title',
+                                    'article_id',
+                                    'votes',
+                                    'topic',
+                                    'author',
+                                    'created_at',
+                                    'comment_count'
+                                )
+                            })
+                        })
+                })
+            })
+        })
         describe('/:article_id', () => {
             describe('GET:', () => {
                 describe('200:', () => {

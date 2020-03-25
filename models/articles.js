@@ -21,3 +21,18 @@ exports.updateArticleVoteCount = (article_id, inc_votes) => {
         .increment('votes', inc_votes)
         .returning('*')
 }
+
+exports.selectAllArticles = () => {
+    return connection('articles')
+        .select([
+            'articles.article_id',
+            'articles.title',
+            'articles.votes',
+            'articles.topic',
+            'articles.author',
+            'articles.created_at'
+        ])
+        .count('comment_id as comment_count')
+        .leftJoin('comments', 'articles.article_id', 'comments.article_id')
+        .groupBy('articles.article_id')
+}

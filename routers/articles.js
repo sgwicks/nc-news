@@ -1,7 +1,10 @@
 const articlesRouter = require('express').Router()
-const { getArticleById, patchArticleVoteCount } = require('../controllers/articles')
+const { getArticleById, patchArticleVoteCount, getAllArticles } = require('../controllers/articles')
 const { unhandledMethod } = require('../errors/errors')
 const { postNewComment, getCommentsByArticle } = require('../controllers/comments')
+
+articlesRouter.route('/')
+    .get(getAllArticles)
 
 articlesRouter.route('/:article_id')
     .get(getArticleById)
