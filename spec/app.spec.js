@@ -333,6 +333,35 @@ describe('/api', () => {
                         })
                     })
                 })
+                describe.only('GET:', () => {
+                    describe('200:', () => {
+                        it('Returns an array of comments', () => {
+                            return request(app)
+                                .get('/api/articles/1/comments')
+                                .expect(200)
+                                .then(({ body: { comments } }) => {
+                                    expect(comments).to.be.an('Array')
+                                    expect(comments).to.have.lengthOf(13)
+                                })
+                        })
+                        it('Returns comments in the correct format', () => {
+                            return request(app)
+                                .get('/api/articles/1/comments')
+                                .expect(200)
+                                .then(({ body: { comments } }) => {
+                                    comments.forEach(comment => {
+                                        expect(comment).to.have.keys(
+                                            'comment_id',
+                                            'author',
+                                            'votes',
+                                            'created_at',
+                                            'body'
+                                        )
+                                    })
+                                })
+                        })
+                    })
+                })
                 describe('ERROR:', () => {
                     it('405: unhandled methods', () => {
                         return request(app)

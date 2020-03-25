@@ -8,3 +8,14 @@ exports.addNewComment = (article_id, author, body) => {
         body
     }).returning('*')
 }
+
+exports.selectCommentsByArticle = (article_id) => {
+    return connection('comments').select([
+        'comment_id',
+        'author',
+        'votes',
+        'created_at',
+        'body'
+    ])
+        .where({ article_id })
+}
