@@ -35,3 +35,7 @@ exports.updateCommentVotes = (comment_id, votes) => {
             else return comment
         })
 }
+
+exports.removeCommentbyID = (comment_id) => {
+    return connection('comments').where({ comment_id }).del()
+}

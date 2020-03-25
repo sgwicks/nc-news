@@ -615,6 +615,30 @@ describe('/api', () => {
                     })
                 })
             })
+            describe.only('DELETE:', () => {
+                describe('204:', () => {
+                    it('accepts a delete request, returning 204', () => {
+                        return request(app)
+                            .del('/api/comments/1')
+                            .expect(204)
+                            .then(({ body }) => {
+                                expect(body).to.eql({})
+                            })
+                    })
+                    it('removes the comment from the database', () => {
+                        return request(app)
+                            .del('/api/comments/1')
+                            .expect(204)
+                            .then(() => {
+                                return request(app)
+                                    .get('/api/articles/9/comments')
+                                    .then(({ body: { comments } }) => {
+                                        expect(comments).to.have.lengthOf(1)
+                                    })
+                            })
+                    })
+                })
+            })
             describe('ERROR:', () => {
                 it('400: invalid comment_id', () => {
                     return request(app)

@@ -1,4 +1,4 @@
-const { addNewComment, selectCommentsByArticle, updateCommentVotes } = require('../models/comments')
+const { addNewComment, selectCommentsByArticle, updateCommentVotes, removeCommentbyID } = require('../models/comments')
 
 exports.postNewComment = (req, res, next) => {
     if (Object.keys(req.body).length > 2) res.status(400).send({ msg: 'Bad request: request can only contain {username, body}' })
@@ -28,4 +28,11 @@ exports.patchCommentVotes = (req, res, next) => {
             .then(([comment]) => res.status(200).send({ comment }))
             .catch(next)
     }
+}
+
+exports.deleteCommentbyId = (req, res, next) => {
+    const { comment_id } = req.params
+    removeCommentbyID(comment_id)
+        .then(() => res.sendStatus(204))
+        .catch(next)
 }
