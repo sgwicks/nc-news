@@ -1,7 +1,7 @@
 const commentsRouter = require('express').Router()
-const { postNewComment } = require('../controllers/comments')
+const { patchCommentVotes } = require('../controllers/comments')
 
-commentsRouter.route('/')
-    .post(postNewComment)
+commentsRouter.route('/:comment_id')
+    .patch(patchCommentVotes)
 
 module.exports = commentsRouter

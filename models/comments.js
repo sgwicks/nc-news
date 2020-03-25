@@ -23,3 +23,10 @@ exports.selectCommentsByArticle = (article_id, { sort_by, order = 'desc' }) => {
             else query.orderBy('created_at', order)
         })
 }
+
+exports.updateCommentVotes = (comment_id, votes) => {
+    return connection('comments')
+        .where({ comment_id })
+        .increment({ votes })
+        .returning('*')
+}

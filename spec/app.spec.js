@@ -524,4 +524,46 @@ describe('/api', () => {
             })
         })
     })
+    describe('/comments', () => {
+        describe('/:comment_id', () => {
+            describe('PATCH:', () => {
+                describe('200:', () => {
+                    it('accepts an {inc_votes: NUM} patch', () => {
+                        return request(app)
+                            .patch('/api/comments/1')
+                            .send({ inc_votes: 1 })
+                            .expect(200)
+                            .then(({ body: { comment } }) => {
+                                expect(comment.votes).to.eql(17)
+                            })
+                    })
+                    it('returns the updated comment object', () => {
+                        return request(app)
+                            .patch('/api/comments/1')
+                            .send({ inc_votes: 1 })
+                            .then(({ body: { comment } }) => {
+                                expect(comment).to.have.keys(
+                                    'comment_id',
+                                    'author',
+                                    'article_id',
+                                    'votes',
+                                    'created_at',
+                                    'body'
+                                )
+                            })
+                    })
+                    it('works for negative values', () => {
+                        return request(app)
+                            .patch('/api/comments/1')
+                            .send({ inc_votes: -3 })
+                            .expect(200)
+                            .then(({ body: { comment } }) => {
+                                expect(comment.votes).to.equal(13)
+                            })
+
+                    })
+                })
+            })
+        })
+    })
 })
