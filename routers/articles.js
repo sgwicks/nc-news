@@ -10,5 +10,6 @@ articlesRouter.route('/:article_id')
 
 articlesRouter.route('/:article_id/comments')
     .post(postNewComment)
+    .all(unhandledMethod)
 
 module.exports = articlesRouter

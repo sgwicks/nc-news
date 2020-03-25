@@ -15,11 +15,6 @@ exports.handle400Errors = (err, req, res, next) => {
         case '23503': res.status(422).send({ msg: 'Unprocessable entity: data provided does not match the database' }); break;
         default: next(err)
     }
-    // if (err.code === '22P02') 
-    // else if (err.code === '23502') 
-    // else if (err.code === '22001') 
-    // else if (err.code === '23503') 
-    // else next(err)
 }
 
 exports.handle500Errors = (err, req, res, next) => {

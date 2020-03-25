@@ -334,8 +334,13 @@ describe('/api', () => {
                     })
                 })
                 describe('ERROR:', () => {
-                    xit('405: unhandled methods', () => {
-
+                    it('405: unhandled methods', () => {
+                        return request(app)
+                            .delete('/api/articles/1/comments')
+                            .expect(405)
+                            .then(({ body: { msg } }) => {
+                                expect(msg).to.equal('DELETE method not allowed')
+                            })
                     })
                 })
             })
