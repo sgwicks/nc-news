@@ -72,7 +72,7 @@ describe('/api', () => {
         })
     })
     describe('/articles', () => {
-        describe.only('GET:', () => {
+        describe('GET:', () => {
             describe('200:', () => {
                 it('responds with an array of all article objects', () => {
                     return request(app)
@@ -147,6 +147,42 @@ describe('/api', () => {
                             expect(articles[0].topic).to.equal('cats')
                         })
                 })
+                it('returns an empty array when no articles match queries', () => {
+                    return request(app)
+                        .get('/api/articles?author=invalid_author')
+                        .expect(200)
+                        .then(({ body: { articles } }) => {
+                            expect(articles).to.have.lengthOf(0)
+                        })
+                })
+                it('ignores nonsense queries', () => {
+                    return request(app)
+                        .get('/api/articles?invalid_query=anything')
+                        .expect(200)
+                        .then(({ body: { articles } }) => {
+                            expect(articles).to.have.lengthOf(12)
+                        })
+                })
+            })
+            describe('400:', () => {
+                it('invalid sort_by column', () => {
+                    return request(app)
+                        .get('/api/articles?sort_by=invalid_column')
+                        .expect(400)
+                        .then(({ body: { msg } }) => {
+                            expect(msg).to.equal('Bad request: one or more queried columns does not exist')
+                        })
+                })
+            })
+        })
+        describe('ERROR:', () => {
+            it('405: unhandled methods', () => {
+                return request(app)
+                    .post('/api/articles')
+                    .expect(405)
+                    .then(({ body: { msg } }) => {
+                        expect(msg).to.equal('POST method not allowed')
+                    })
             })
         })
         describe('/:article_id', () => {

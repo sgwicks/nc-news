@@ -5,6 +5,7 @@ const { postNewComment, getCommentsByArticle } = require('../controllers/comment
 
 articlesRouter.route('/')
     .get(getAllArticles)
+    .all(unhandledMethod)
 
 articlesRouter.route('/:article_id')
     .get(getArticleById)
