@@ -615,7 +615,7 @@ describe('/api', () => {
                     })
                 })
             })
-            describe.only('DELETE:', () => {
+            describe('DELETE:', () => {
                 describe('204:', () => {
                     it('accepts a delete request, returning 204', () => {
                         return request(app)
@@ -667,6 +667,16 @@ describe('/api', () => {
                         })
                 })
             })
+        })
+    })
+    describe.only('404:', () => {
+        it('returns a custom 404 message', () => {
+            return request(app)
+                .get('/invalid_route/invalid')
+                .expect(404)
+                .then(({ body: { msg } }) => {
+                    expect(msg).to.equal('/invalid_route/invalid does not exist')
+                })
         })
     })
 })

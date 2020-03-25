@@ -2,6 +2,10 @@ exports.unhandledMethod = (req, res, next) => {
     res.status(405).send({ msg: `${req.method} method not allowed` })
 }
 
+exports.handle404Errors = (req, res, next) => {
+    res.status(404).send({ msg: `${req.originalUrl} does not exist` })
+}
+
 exports.handleCustomErrors = (err, req, res, next) => {
     if (err.status) res.status(err.status).send({ msg: err.msg })
     else next(err)
@@ -17,6 +21,7 @@ exports.handle400Errors = (err, req, res, next) => {
         default: next(err)
     }
 }
+
 
 exports.handle500Errors = (err, req, res, next) => {
     console.log(err);
