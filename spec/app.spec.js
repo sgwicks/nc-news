@@ -101,6 +101,32 @@ describe('/api', () => {
                             })
                         })
                 })
+                it('default sort_by is date (descending)', () => {
+                    return request(app)
+                        .get('/api/articles')
+                        .expect(200)
+                        .then(({ body: { articles } }) => {
+                            expect(articles[0].title).to.equal('Living in the shadow of a great man')
+                        })
+                })
+                it('can take any column as a sort_by query', () => {
+                    return request(app)
+                        .get('/api/articles?sort_by=title')
+                        .expect(200)
+                        .then(({ body: { articles } }) => {
+                            expect(articles[0].title).to.equal('Z')
+                            expect(articles[11].title).to.equal('A')
+                        })
+                })
+                it('can take an order query to sort_by asc or desc', () => {
+                    return request(app)
+                        .get('/api/articles?sort_by=title&order=asc')
+                        .expect(200)
+                        .then(({ body: { articles } }) => {
+                            expect(articles[11].title).to.equal('Z')
+                            expect(articles[0].title).to.equal('A')
+                        })
+                })
             })
         })
         describe('/:article_id', () => {

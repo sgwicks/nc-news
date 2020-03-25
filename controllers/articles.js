@@ -20,7 +20,8 @@ exports.patchArticleVoteCount = (req, res, next) => {
 }
 
 exports.getAllArticles = (req, res, next) => {
-    selectAllArticles()
+    const { query } = req
+    selectAllArticles(query)
         .then(articles => res.status(200).send({ articles }))
         .catch(next)
 }

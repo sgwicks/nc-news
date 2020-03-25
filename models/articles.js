@@ -22,7 +22,7 @@ exports.updateArticleVoteCount = (article_id, inc_votes) => {
         .returning('*')
 }
 
-exports.selectAllArticles = () => {
+exports.selectAllArticles = ({ sort_by, order = 'desc' }) => {
     return connection('articles')
         .select([
             'articles.article_id',
@@ -35,4 +35,8 @@ exports.selectAllArticles = () => {
         .count('comment_id as comment_count')
         .leftJoin('comments', 'articles.article_id', 'comments.article_id')
         .groupBy('articles.article_id')
+        .modify(query => {
+            if (sort_by) query.orderBy(sort_by, order)
+            else query.orderBy('created_at', order)
+        })
 }
