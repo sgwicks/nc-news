@@ -562,6 +562,19 @@ describe('/api', () => {
                             })
 
                     })
+                    it('updates the comment in the database', () => {
+                        return request(app)
+                            .patch('/api/comments/1')
+                            .send({ inc_votes: 1 })
+                            .expect(200)
+                            .then(() => {
+                                return request(app)
+                                    .get('/api/articles/9/comments')
+                                    .then(({ body: { comments } }) => {
+                                        expect(comments[0].votes).to.equal(17)
+                                    })
+                            })
+                    })
                 })
                 describe('400:', () => {
                     it('invalid key on request', () => {
