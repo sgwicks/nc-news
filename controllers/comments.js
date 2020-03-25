@@ -12,7 +12,8 @@ exports.postNewComment = (req, res, next) => {
 }
 
 exports.getCommentsByArticle = (req, res, next) => {
+    const { query } = req
     const { article_id } = req.params
-    selectCommentsByArticle(article_id)
+    selectCommentsByArticle(article_id, query)
         .then(comments => res.status(200).send({ comments }))
 }

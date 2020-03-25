@@ -368,6 +368,15 @@ describe('/api', () => {
                                     expect(comments[0].comment_id).to.equal(18)
                                 })
                         })
+                        it('accepts query to sort_by any column', () => {
+                            return request(app)
+                                .get('/api/articles/1/comments?sort_by=author')
+                                .expect(200)
+                                .then(({ body: { comments } }) => {
+                                    expect(comments[0].author).to.equal('butter_bridge')
+                                    expect(comments[12].author).to.equal('icellusedkars')
+                                })
+                        })
                     })
                 })
                 describe('ERROR:', () => {
