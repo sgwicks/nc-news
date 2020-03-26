@@ -7,7 +7,7 @@ beforeEach(() => connection.seed.run())
 after(() => connection.destroy())
 
 describe('/api', () => {
-    describe.only('GET:', () => {
+    describe('GET:', () => {
         describe('200:', () => {
             it('returns a json file with all the endpoint information', () => {
                 return request(app)
@@ -734,6 +734,16 @@ describe('/api', () => {
                 .then(({ body: { msg } }) => {
                     expect(msg).to.equal('/invalid_route/invalid does not exist')
                 })
+        })
+    })
+    describe('405:', () => {
+        it('unhandled methods on /api', () => {
+            return request(app)
+            .del('/api')
+            .expect(405)
+            .then(({body: {msg}}) => {
+                expect(msg).to.equal('DELETE method not allowed')
+            })
         })
     })
 })
