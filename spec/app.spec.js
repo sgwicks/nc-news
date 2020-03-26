@@ -71,7 +71,7 @@ describe('/api', () => {
             })
         })
     })
-    describe.only('/articles', () => {
+    describe('/articles', () => {
         describe('GET:', () => {
             describe('200:', () => {
                 it('responds with an array of all article objects', () => {
@@ -179,6 +179,14 @@ describe('/api', () => {
                     .expect(404)
                     .then(({body:{msg}}) => {
                         expect(msg).to.equal('That topic does not exist')
+                    })
+                })
+                it('404: no authors match query', () => {
+                    return request(app)
+                    .get('/api/articles?author=invalid_author')
+                    .expect(404)
+                    .then(({body:{msg}}) => {
+                        expect(msg).to.equal('That author does not exist')
                     })
                 })
             })

@@ -58,3 +58,15 @@ exports.checkTopicExists = ({topic}) => {
     }
     else return Promise.resolve()
 }
+
+exports.checkAuthorExists = ({author}) => {
+    if (author) {
+        return connection('users')
+        .select('*')
+        .where('username', author)
+        .then(authors => {
+            if (!authors.length) return Promise.reject({status: 404, msg: 'That author does not exist'})
+        })
+    }
+    else return Promise.resolve()
+}
