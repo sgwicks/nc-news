@@ -46,3 +46,15 @@ exports.selectAllArticles = ({ sort_by, order = 'desc', author, topic }) => {
             if (topic) query.where('articles.topic', topic)
         })
 }
+
+exports.checkTopicExists = ({topic}) => {
+    if (topic) {
+        return connection('topics')
+        .select('*')
+        .where('slug', topic)
+        .then(topics => {
+            if (!topics.length) return Promise.reject({status: 404, msg: 'That topic does not exist'})
+        })
+    }
+    else return Promise.resolve()
+}

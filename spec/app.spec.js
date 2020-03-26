@@ -71,7 +71,7 @@ describe('/api', () => {
             })
         })
     })
-    describe('/articles', () => {
+    describe.only('/articles', () => {
         describe('GET:', () => {
             describe('200:', () => {
                 it('responds with an array of all article objects', () => {
@@ -147,9 +147,9 @@ describe('/api', () => {
                             expect(articles[0].topic).to.equal('cats')
                         })
                 })
-                it('returns an empty array when no articles match queries', () => {
+                it('returns an empty array when no articles match valid queries', () => {
                     return request(app)
-                        .get('/api/articles?author=invalid_author')
+                        .get('/api/articles?author=lurker')
                         .expect(200)
                         .then(({ body: { articles } }) => {
                             expect(articles).to.have.lengthOf(0)
@@ -172,6 +172,14 @@ describe('/api', () => {
                         .then(({ body: { msg } }) => {
                             expect(msg).to.equal('Bad request: one or more queried columns does not exist')
                         })
+                })
+                it('404: no articles match query', () => {
+                    return request(app)
+                    .get('/api/articles?topic=invalid_topic')
+                    .expect(404)
+                    .then(({body:{msg}}) => {
+                        expect(msg).to.equal('That topic does not exist')
+                    })
                 })
             })
         })
