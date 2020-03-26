@@ -282,6 +282,24 @@ describe('/api', () => {
                                     })
                             })
                     })
+                    it.only('ignores empty body, returning the original article', () => {
+                        return request(app)
+                            .patch('/api/articles/1')
+                            .send({ })
+                            .expect(200)
+                            .then(({ body: { article } }) => {
+                                expect(article.votes).to.equal(100)
+                                expect(article).to.have.keys(
+                                    'author',
+                                    'title',
+                                    'article_id',
+                                    'body',
+                                    'topic',
+                                    'created_at',
+                                    'votes'
+                                )
+                            })
+                    })
                 })
                 describe('400:', () => {
                     it('wrong body key', () => {
@@ -300,15 +318,6 @@ describe('/api', () => {
                             .expect(400)
                             .then(({ body: { msg } }) => {
                                 expect(msg).to.equal('Bad request: invalid data type')
-                            })
-                    })
-                    it('empty body', () => {
-                        return request(app)
-                            .patch('/api/articles/1')
-                            .send({})
-                            .expect(400)
-                            .then(({ body: { msg } }) => {
-                                expect(msg).to.equal('Bad request: must use {inc_votes: NUM}')
                             })
                     })
                     it('extra key on body', () => {
