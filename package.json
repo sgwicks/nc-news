@@ -19,7 +19,7 @@
     "migrate-rollback-prod":"NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback",
     "migrate-reset-test": "NODE_ENV=test knex migrate:rollback && NODE_ENV=test knex migrate:latest",
     "migrate-reset": "migrate:rollback && migrate:latest",
-    "listen": "node listen.js"
+    "start": "node listen.js"
   },
   "repository": {
     "type": "git",
