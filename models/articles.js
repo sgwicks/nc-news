@@ -47,26 +47,13 @@ exports.selectAllArticles = ({ sort_by, order = 'desc', author, topic }) => {
         })
 }
 
-exports.checkTopicExists = ({topic}) => {
-    if (topic) {
-        return connection('topics')
-        .select('*')
-        .where('slug', topic)
-        .then(topics => {
-            if (!topics.length) return Promise.reject({status: 404, msg: 'That topic does not exist'})
-        })
-    }
-    else return Promise.resolve()
-}
+exports.checkArticleExists = (article_id) => {
+    return connection('articles')
+    .select('*')
+    .where({article_id})
+    .then((articles) => {
+        if (!articles.length) return Promise.reject({status:404, msg:'Article doesn\'t exist'})
+        else return articles
+    })
 
-exports.checkAuthorExists = ({author}) => {
-    if (author) {
-        return connection('users')
-        .select('*')
-        .where('username', author)
-        .then(authors => {
-            if (!authors.length) return Promise.reject({status: 404, msg: 'That author does not exist'})
-        })
-    }
-    else return Promise.resolve()
 }

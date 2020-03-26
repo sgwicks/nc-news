@@ -9,7 +9,7 @@ exports.addNewComment = (article_id, author, body) => {
     }).returning('*')
 }
 
-exports.selectCommentsByArticle = (article_id, { sort_by, order = 'desc' }) => {
+exports.selectCommentsByArticle = (article_id, { sort_by, order = 'desc' }) => { 
     return connection('comments').select([
         'comment_id',
         'author',

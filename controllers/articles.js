@@ -1,4 +1,6 @@
-const { selectArticleById, updateArticleVoteCount, selectAllArticles, checkTopicExists, checkAuthorExists } = require('../models/articles')
+const { selectArticleById, updateArticleVoteCount, selectAllArticles } = require('../models/articles')
+const {checkTopicExists} = require('../models/topics')
+const {checkAuthorExists} = require('../models/users')
 
 exports.getArticleById = (req, res, next) => {
     const { article_id } = req.params
@@ -8,10 +10,10 @@ exports.getArticleById = (req, res, next) => {
 }
 
 exports.patchArticleVoteCount = (req, res, next) => {
+    const { article_id } = req.params
+    const { inc_votes } = req.body
     if (Object.keys(req.body).length > 1) res.status(400).send({ msg: 'Bad request: only inc_votes is accepted' })
     else {
-        const { article_id } = req.params
-        const { inc_votes } = req.body
         updateArticleVoteCount(article_id, inc_votes)
             .then(([article]) => res.status(200).send({ article }))
             .catch(next)

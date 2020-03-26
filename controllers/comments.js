@@ -1,4 +1,5 @@
 const { addNewComment, selectCommentsByArticle, updateCommentVotes, removeCommentbyID } = require('../models/comments')
+const {checkArticleExists} = require('../models/articles')
 
 exports.postNewComment = (req, res, next) => {
     if (Object.keys(req.body).length > 2) res.status(400).send({ msg: 'Bad request: request can only contain {username, body}' })
@@ -14,8 +15,9 @@ exports.postNewComment = (req, res, next) => {
 exports.getCommentsByArticle = (req, res, next) => {
     const { query } = req
     const { article_id } = req.params
-    selectCommentsByArticle(article_id, query)
-        .then(comments => res.status(200).send({ comments }))
+    
+    Promise.all([selectCommentsByArticle(article_id, query), checkArticleExists(article_id)])
+        .then(([comments]) => res.status(200).send({ comments }))
         .catch(next)
 }
 
