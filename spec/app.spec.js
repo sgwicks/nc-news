@@ -7,6 +7,28 @@ beforeEach(() => connection.seed.run())
 after(() => connection.destroy())
 
 describe('/api', () => {
+    describe.only('GET:', () => {
+        describe('200:', () => {
+            it('returns a json file with all the endpoint information', () => {
+                return request(app)
+                .get('/api')
+                .expect(200)
+                .then(({body:{api}})=>{
+                    expect(api).to.include.keys(
+                        'GET /api',
+                        'GET /api/topics',
+                        'GET /api/articles',
+                        'GET /api/articles/:article_id',
+                        'PATCH /api/articles/:article_id',
+                        'POST /api/articles/:article_id/comments',
+                        'GET /api/articles/:article_id/comments',
+                        'PATCH /api/comments/:comment_id',
+                        'DELETE /api/comments/:comment_id'
+                    )
+                })
+            })
+        })
+    })
     describe('/topics', () => {
         describe('GET', () => {
             describe('200:', () => {
