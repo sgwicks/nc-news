@@ -7,6 +7,7 @@
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed-dev": "knex seed:run",
     "seed-test": "NODE_ENV=test knex seed:run",
+    "seed-prod":"NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex seed:run",
     "test-utils": "mocha spec/utils.spec.js",
     "test": "NODE_ENV=test mocha spec/app.spec.js",
     "migrate-make": "knex migrate:make",
@@ -14,9 +15,11 @@
     "migrate-rollback": "knex migrate:rollback",
     "migrate-latest-test": "NODE_ENV=test knex migrate:latest",
     "migrate-rollback-test": "NODE_ENV=test knex migrate:rollback",
+    "migrate-latest-prod":"NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:latest",
+    "migrate-rollback-prod":"NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback",
     "migrate-reset-test": "NODE_ENV=test knex migrate:rollback && NODE_ENV=test knex migrate:latest",
     "migrate-reset": "migrate:rollback && migrate:latest",
-    "listen": "nodemon listen.js"
+    "listen": "node listen.js"
   },
   "repository": {
     "type": "git",
