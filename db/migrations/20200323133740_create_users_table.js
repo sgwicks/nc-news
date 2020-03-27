@@ -1,6 +1,5 @@
 
 exports.up = function (knex) {
-    console.log('Creating users table')
     return knex.schema.createTable('users', (usersTable) => {
         usersTable.string('username').primary();
         usersTable.string('avatar_url').defaultTo('./img/avatar.jpg');
@@ -9,6 +8,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    console.log('Dropping users table')
     return knex.schema.dropTable('users')
 };
