@@ -4,21 +4,21 @@ This project is a sample of everything I learned about making a database during 
 
 # Take a look
 
-Feel free to clone the repo down and take a look at what's going on behind the scenes. I also have it hosted over at https://nc-news-now.herokuapp.com/api so you can see how it functions live.
+Feel free to clone the repo down and take a look at what's going on behind the scenes. I also have it hosted over at [NC News Now API](https://nc-news-now.herokuapp.com/api) so you can see how it functions live.
 
 ## Setting Up
 
 ### Postgres
 
-The database for this project was built with postgres, and uses it to test. If you don't already have it, install postgres: http://postgresguide.com/setup/install.html and set up a new user: http://postgresguide.com/setup/users.html
+The database for this project was built with postgres, and uses it to test. If you don't already have it, install [postgres](http://postgresguide.com/setup/install.html) and [set up a new user](http://postgresguide.com/setup/users.html)
 
 ### Node.js & Node Package Manager
 
-This project was built using node.js v13.11.0 and npm v6.13.7. If you don't already have them, you can find instructions to install them both here: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm 
+This project was built using node.js v13.11.0 and npm v6.13.7. If you don't already have them, you can find instructions to install them both here: [Installing node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 ### Git CLI
 
-To clone the repo down onto your computer, you're also going to need a local version of git. Again, I'll let the git documentation speak for itself: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git 
+To clone the repo down onto your computer, you're also going to need a local version of git. Again, I'll let the [git documentation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) speak for itself.
 
 ### Clone the repo
 
@@ -30,7 +30,7 @@ git clone https://github.com/sgwicks/nc-news
 cd nc-news
 ```
 
-Now you can open the folder in a code editor; I built and ran this in VSCode (https://code.visualstudio.com/download) but I won't dictate how you should run it.
+Now you can open the folder in a code editor; I built and ran this in [VSCode](https://code.visualstudio.com/download) but I won't dictate how you should run it.
 
 ### Dependencies
 
@@ -154,3 +154,9 @@ The data provided with this project is not in the exact form it needs to be to m
 `makeRefObj`: Takes a list of articles and creates a reference object that relates each article's `title` string with its new `article_id` in the database. This is vital to link users (as authors) and comments to their specific articles in the database.
 
 `formatComments`: Formats comments to match the database schema required; renaming keys, converting article titles to `article_id` (using the reference object from the previous function) and formatting dates as in the first function.
+
+### End Points
+
+End points are described in the endpoints.json file, which is also displayed on the main api page of the hosted version: [NC News Now API](https://nc-news-now.herokuapp.com/api).
+
+End points for this project are designed to be RESTful, and the spec file is laid out in such a way to easily see which tests affect which specific end points. Error handling is also fully tested, but if you do manage to find an error that isn't handled, please check the console log output (where it should be displayed) and raise an issue!
