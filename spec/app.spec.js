@@ -247,7 +247,7 @@ describe('/api', () => {
                             .get('/api/articles/1')
                             .expect(200)
                             .then(({ body: { article } }) => {
-                                expect(article.comment_count).to.equal(13)
+                                expect(article.comment_count).to.equal('13')
                             })
                     })
                 })
@@ -287,7 +287,6 @@ describe('/api', () => {
                                     'topic',
                                     'created_at',
                                     'votes'
-                                    // comment_count?
                                 )
                             })
                     })
@@ -324,17 +323,6 @@ describe('/api', () => {
                     })
                 })
                 describe('400:', () => {
-                    /* Can't find how to make this work while also ignoring empty body?
-                    it('wrong body key', () => {
-                        return request(app)
-                            .patch('/api/articles/1')
-                            .send({ inc_vote: 1 })
-                            .expect(400)
-                            .then(({ body: { msg } }) => {
-                                expect(msg).to.equal('Bad request: must use {inc_votes: NUM}')
-                            })
-                    }) 
-                    */
                     it('invalid data type', () => {
                         return request(app)
                             .patch('/api/articles/1')
@@ -407,7 +395,6 @@ describe('/api', () => {
                                 })
                         })
                         it('adds the comment to the comments table', () => {
-                            // Can come back to this test when GET comments is implemented
                             return request(app)
                                 .post('/api/articles/1/comments')
                                 .send({
@@ -419,7 +406,7 @@ describe('/api', () => {
                                     return request(app)
                                         .get('/api/articles/1')
                                         .then(({ body: { article } }) => {
-                                            expect(article.comment_count).to.equal(14)
+                                            expect(article.comment_count).to.equal('14')
                                         })
                                 })
                         })
@@ -467,18 +454,6 @@ describe('/api', () => {
                                 .expect(400)
                                 .then(({ body: { msg } }) => {
                                     expect(msg).to.equal('Bad request: request can only contain {username, body}')
-                                })
-                        })
-                        it('comment too long', () => {
-                            return request(app)
-                                .post('/api/articles/1/comments')
-                                .send({
-                                    username: 'icellusedkars',
-                                    body: 'Just re-reading this article. What a beautiful construction. It has inspired me to write an article of my own, which I shall place here in the comments. Firstly, let me talk about the circumstances that lead me to post such an article, which shall itself hopefully be described by future readers as "a beaut"'
-                                })
-                                .expect(400)
-                                .then(({ body: { msg } }) => {
-                                    expect(msg).to.equal('Bad request: body too long')
                                 })
                         })
                         it('422: invalid username', () => {

@@ -1,21 +1,19 @@
 const connection = require('../db/connection')
 
 exports.selectArticleById = (article_id) => {
-    const article = connection('articles').select('*').where('article_id', article_id);
-    const comments = connection('comments').select('*').where('article_id', article_id);
-
-    return Promise.all([article, comments]).then(result => {
-        if (!result[0].length) return Promise.reject({ status: 404, msg: 'article doesn\'t exist' })
-        else {
-            const comment_count = result[1].length
-            const [[article]] = result
-            return { ...article, comment_count }
-        }
+    return connection('articles')
+    .select('articles.*')
+    .count('comment_id as comment_count')
+    .leftJoin('comments', 'articles.article_id', 'comments.article_id')
+    .where('articles.article_id', article_id)
+    .groupBy('articles.article_id')
+    .then(article => {
+        if(!article.length) return Promise.reject({ status: 404, msg: 'article doesn\'t exist' })
+        else return article;
     })
 }
 
 exports.updateArticleVoteCount = (article_id, inc_votes =0) => {
-    // if (!inc_votes) return Promise.reject({ status: 400, msg: 'Bad request: must use {inc_votes: NUM}' })
     return connection('articles')
         .where('article_id', article_id)
         .increment('votes', inc_votes)
@@ -36,15 +34,10 @@ exports.selectAllArticles = ({ sort_by, order = 'desc', author, topic }) => {
         .leftJoin('comments', 'articles.article_id', 'comments.article_id')
         .groupBy('articles.article_id')
         .modify(query => {
-            if (sort_by) query.orderBy(sort_by, order)
-            else query.orderBy('created_at', order)
-        })
-        .modify(query => {
-            if (author) query.where('articles.author', author)
-        })
-        .modify(query => {
-            if (topic) query.where('articles.topic', topic)
-        })
+            if (sort_by) query.orderBy(sort_by, order); else query.orderBy('created_at', order);
+            if (author) query.where('articles.author', author);
+            if (topic) query.where('articles.topic', topic);
+        });
 }
 
 exports.checkArticleExists = (article_id) => {
