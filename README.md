@@ -115,3 +115,42 @@ If you want to run migration without seeding, these are your scripts. Without `-
 
 Like seeding, you can use these migrations as a soft-reset should something go wrong with your database, or if you want to play with an empty database with full table schemas set up.
 
+## Running Tests
+
+This project was created using full Test Driven Development practices, and so there's a healthy, functional test suite for you to try. 
+
+```bash
+# Test the utility functions
+
+npm run test-utils
+
+# Test the api
+
+npm test
+```
+**\*\*\*NOTE: By default `npm test` runs ALL tests\*\*\***
+
+Each test file is split into `describe` and `it` blocks. To test a particular function or endpoint, alter the block with `.only` like so:
+
+```js
+// Test the function formatDates:
+
+describe.only('formatDates', () => { ... }
+
+// Run just a single test:
+
+describe('formatDates', () => { 
+    it.only('Converts the created_at key into a javscript Date object', () => { ... })
+ })
+```
+By default, the seed file will run before each test, to ensure that data is properly structured and fully seeded each time. The test suite uses only the test data.
+
+### Utility functions
+
+The data provided with this project is not in the exact form it needs to be to match the schema. To convert it, the seed file runs a couple of utility functions that allow it to be seeded without impacting the original data.
+
+`formatDates`: Formats the `created_at` date in the original data (given as UTC milliseconds since Jan 1st 1970) and turns them into Javascript Date objects (which SQL can interpret and format)
+
+`makeRefObj`: Takes a list of articles and creates a reference object that relates each article's `title` string with its new `article_id` in the database. This is vital to link users (as authors) and comments to their specific articles in the database.
+
+`formatComments`: Formats comments to match the database schema required; renaming keys, converting article titles to `article_id` (using the reference object from the previous function) and formatting dates as in the first function.
