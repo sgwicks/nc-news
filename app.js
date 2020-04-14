@@ -1,22 +1,30 @@
-const express = require('express')
-const app = express()
-const apiRouter = require('./routers/api')
-const { handleCustomErrors, handle404Errors, handle400Errors, handle500Errors } = require('./errors/errors')
+const cors = require('cors');
+const express = require('express');
+const app = express();
+const apiRouter = require('./routers/api');
+const {
+  handleCustomErrors,
+  handle404Errors,
+  handle400Errors,
+  handle500Errors
+} = require('./errors/errors');
 
-app.use(express.json())
+app.use(cors());
+
+app.use(express.json());
 
 // ROUTING
 
-app.use('/api', apiRouter)
+app.use('/api', apiRouter);
 
 // INVALID ROUTES
 
-app.all('/*', handle404Errors)
+app.all('/*', handle404Errors);
 
 // ERROR HANDLING
 
-app.use(handleCustomErrors)
-app.use(handle400Errors)
-app.use(handle500Errors)
+app.use(handleCustomErrors);
+app.use(handle400Errors);
+app.use(handle500Errors);
 
-module.exports = app
+module.exports = app;
